@@ -228,6 +228,7 @@ class WebTouchEvent;
 class WebCredentialsMessenger;
 class RemoteLayerTreeTransaction;
 
+enum class DeviceAccessState;
 enum FindOptions : uint16_t;
 enum class DragControllerAction;
 
@@ -566,6 +567,7 @@ public:
 #if ENABLE(MEDIA_STREAM)
     UserMediaPermissionRequestManager& userMediaPermissionRequestManager() { return *m_userMediaPermissionRequestManager; }
     void prepareToSendUserMediaPermissionRequest();
+    void captureDevicesChanged(DeviceAccessState);
 #endif
 
     void elementDidFocus(WebCore::Node*);
@@ -1695,10 +1697,6 @@ private:
     PAL::HysteresisActivity m_userActivityHysteresis;
 
     uint64_t m_pendingNavigationID { 0 };
-
-#if ENABLE(WEBGL)
-    WebCore::WebGLLoadPolicy m_systemWebGLPolicy { WebCore::WebGLAllowCreation };
-#endif
 
     bool m_mainFrameProgressCompleted { false };
     bool m_shouldDispatchFakeMouseMoveEvents { true };

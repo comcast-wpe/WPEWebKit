@@ -35,12 +35,11 @@
 #include "LibWebRTCMacros.h"
 #include "RealtimeMediaSource.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
+ALLOW_UNUSED_PARAMETERS_BEGIN
 
 #include <webrtc/api/mediastreaminterface.h>
 
-#pragma clang diagnostic pop
+ALLOW_UNUSED_PARAMETERS_END
 
 #include <wtf/RetainPtr.h>
 
@@ -64,13 +63,19 @@ private:
     void startProducingData() final;
     void stopProducingData()  final;
 
-    const RealtimeMediaSourceCapabilities& capabilities() const final;
-    const RealtimeMediaSourceSettings& settings() const final;
+    const RealtimeMediaSourceCapabilities& capabilities() final;
+    const RealtimeMediaSourceSettings& settings() final;
+
+    bool isIncomingAudioSource() const final { return true; }
 
     RealtimeMediaSourceSettings m_currentSettings;
     rtc::scoped_refptr<webrtc::AudioTrackInterface> m_audioTrack;
 };
 
 } // namespace WebCore
+
+SPECIALIZE_TYPE_TRAITS_BEGIN(WebCore::RealtimeIncomingAudioSource)
+    static bool isType(const WebCore::RealtimeMediaSource& source) { return source.isIncomingAudioSource(); }
+SPECIALIZE_TYPE_TRAITS_END()
 
 #endif // USE(LIBWEBRTC)

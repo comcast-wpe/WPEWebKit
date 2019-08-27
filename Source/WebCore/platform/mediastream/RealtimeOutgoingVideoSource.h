@@ -34,13 +34,12 @@
 #include "MediaStreamTrackPrivate.h"
 #include <Timer.h>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
+ALLOW_UNUSED_PARAMETERS_BEGIN
 
 #include <webrtc/api/mediastreaminterface.h>
 #include <webrtc/common_video/include/i420_buffer_pool.h>
 
-#pragma clang diagnostic pop
+ALLOW_UNUSED_PARAMETERS_END
 
 #include <wtf/Optional.h>
 #include <wtf/ThreadSafeRefCounted.h>
@@ -79,6 +78,8 @@ protected:
     uint32_t m_height { 0 };
     bool m_shouldApplyRotation { false };
     webrtc::VideoRotation m_currentRotation { webrtc::kVideoRotation_0 };
+
+    virtual rtc::scoped_refptr<webrtc::VideoFrameBuffer> createBlackFrame(size_t width, size_t height) = 0;
 
 private:
     void sendBlackFramesIfNeeded();

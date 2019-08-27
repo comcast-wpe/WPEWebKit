@@ -29,21 +29,30 @@
 #include "LibWebRTCMacros.h"
 #include "RTCDataChannelHandler.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
+ALLOW_UNUSED_PARAMETERS_BEGIN
 
 #include <webrtc/api/datachannelinterface.h>
 
-#pragma clang diagnostic pop
+ALLOW_UNUSED_PARAMETERS_END
+
+namespace webrtc {
+struct DataChannelInit;
+}
 
 namespace WebCore {
 
+class RTCDataChannelEvent;
 class RTCDataChannelHandlerClient;
+struct RTCDataChannelInit;
+class ScriptExecutionContext;
 
 class LibWebRTCDataChannelHandler final : public RTCDataChannelHandler, private webrtc::DataChannelObserver {
 public:
     explicit LibWebRTCDataChannelHandler(rtc::scoped_refptr<webrtc::DataChannelInterface>&& channel) : m_channel(WTFMove(channel)) { ASSERT(m_channel); }
     ~LibWebRTCDataChannelHandler();
+
+    static webrtc::DataChannelInit fromRTCDataChannelInit(const RTCDataChannelInit&);
+    static Ref<RTCDataChannelEvent> channelEvent(ScriptExecutionContext&, rtc::scoped_refptr<webrtc::DataChannelInterface>&&);
 
 private:
     // RTCDataChannelHandler API
